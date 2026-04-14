@@ -1,13 +1,6 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { createClient } from "@supabase/supabase-js";
+import { createServiceClient } from "@/lib/supabase";
 import { NextResponse } from "next/server";
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
-}
 
 export async function POST() {
   const { userId } = await auth();
@@ -23,12 +16,13 @@ export async function POST() {
   const displayName =
     `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || null;
 
-  const supabase = getSupabase();
+  const supabase = createServiceClient();
   const { error } = await supabase.from("profiles").upsert(
     {
       clerk_id: userId,
       display_name: displayName,
       avatar_url: user.imageUrl ?? null,
+      updated_at: new Date().toISOString(),
     },
     { onConflict: "clerk_id" }
   );

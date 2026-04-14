@@ -4,7 +4,7 @@ import { useContext } from "react";
 import {
   PlaylistContext,
   type PlaylistContextType,
-} from "@/components/PlaylistProvider";
+} from "@/components/EntriesProvider";
 
 export function usePlaylist(): PlaylistContextType {
   const context = useContext(PlaylistContext);

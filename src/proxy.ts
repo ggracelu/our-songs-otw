@@ -5,6 +5,7 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up(.*)",
   "/u/(.*)",
   "/api/auth/sync",
+  "/api/music/search",
 ]);
 
 export const proxy = clerkMiddleware(async (auth, request) => {

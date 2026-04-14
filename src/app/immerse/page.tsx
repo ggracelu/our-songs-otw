@@ -7,6 +7,7 @@ import { SEASON_COLORS, SEASON_LABELS } from "@/lib/constants";
 import { formatDateShort, getSundaysOfYear } from "@/lib/utils";
 import { WeekEntry } from "@/lib/types";
 import { extractColors } from "@/lib/colorExtract";
+import { StarRating } from "@/components/StarRating";
 
 function ImmerseSection({
   entry,
@@ -122,6 +123,13 @@ function ImmerseSection({
         <p className="immerse-artist mt-2 text-lg text-white sm:text-xl">
           {entry.artist}
         </p>
+
+        {/* Rating */}
+        {entry.rating && (
+          <div className="mt-4">
+            <StarRating value={entry.rating} readonly size="md" />
+          </div>
+        )}
 
         {/* Comment */}
         {entry.comment && (

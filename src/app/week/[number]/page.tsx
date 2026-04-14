@@ -6,6 +6,7 @@ import { usePlaylist } from "@/lib/usePlaylist";
 import { SEASON_COLORS, SEASON_LABELS } from "@/lib/constants";
 import { formatDate } from "@/lib/utils";
 import { SeasonBadge } from "@/components/SeasonBadge";
+import { StarRating } from "@/components/StarRating";
 import { EmptyState } from "@/components/EmptyState";
 
 export default function WeekDetailPage() {
@@ -96,6 +97,15 @@ export default function WeekDetailPage() {
               {SEASON_LABELS[entry.season]}
             </span>
           </div>
+
+          {entry.rating && (
+            <div>
+              <h3 className="text-sm font-medium text-muted mb-1">
+                Rating
+              </h3>
+              <StarRating value={entry.rating} readonly size="md" />
+            </div>
+          )}
 
           {entry.comment && (
             <div>

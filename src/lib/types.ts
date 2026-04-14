@@ -16,6 +16,7 @@ export interface WeekEntry {
   songTitle: string;
   artist: string;
   comment: string;
+  rating?: number; // 0.5–5 in 0.5 steps
   honorableMentions: HonorableMention[];
   season: Season;
   albumArt?: string;

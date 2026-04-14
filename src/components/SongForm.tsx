@@ -6,6 +6,7 @@ import { usePlaylist } from "@/lib/usePlaylist";
 import { HonorableMention } from "@/lib/types";
 import { isSunday, getSundaysOfYear } from "@/lib/utils";
 import { HonorableMentionFields } from "./HonorableMentionFields";
+import { StarRating } from "./StarRating";
 
 export function SongForm() {
   const router = useRouter();
@@ -26,6 +27,7 @@ export function SongForm() {
   const [honorableMentions, setHonorableMentions] = useState<
     HonorableMention[]
   >([]);
+  const [rating, setRating] = useState(0);
   const [error, setError] = useState("");
 
   // Search state — will be wired to MusicBrainz in Phase 4
@@ -41,6 +43,7 @@ export function SongForm() {
       setArtist(existingEntry.artist);
       setComment(existingEntry.comment);
       setHonorableMentions(existingEntry.honorableMentions);
+      setRating(existingEntry.rating || 0);
       setAlbumArt(existingEntry.albumArt || "");
     } else if (prefillWeek) {
       const sundays = getSundaysOfYear(year);
@@ -95,6 +98,7 @@ export function SongForm() {
       songTitle: songTitle.trim(),
       artist: artist.trim(),
       comment: comment.trim(),
+      rating: rating || undefined,
       honorableMentions,
       albumArt: albumArt || undefined,
     };
@@ -235,6 +239,13 @@ export function SongForm() {
           placeholder="Who made it?"
           className="w-full rounded-lg border border-border bg-card px-4 py-2.5 text-sm outline-none focus:border-accent transition-colors"
         />
+      </div>
+
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-muted">
+          Rating
+        </label>
+        <StarRating value={rating} onChange={setRating} size="lg" />
       </div>
 
       <div>
