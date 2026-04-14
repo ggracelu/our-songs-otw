@@ -36,6 +36,17 @@ export interface Profile {
   updatedAt: string;
 }
 
+export interface ProfileCard {
+  id: string;
+  username: string;
+  displayName: string | null;
+  avatarUrl: string | null;
+  bio: string | null;
+  isFollowing: boolean;
+  sharedArtists?: string[];
+  sharedCount?: number;
+}
+
 export interface FeedEntry {
   entryId: string;
   userId: string;

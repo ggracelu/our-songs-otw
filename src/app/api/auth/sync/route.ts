@@ -31,5 +31,15 @@ export async function POST() {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ success: true });
+  // Check if user has claimed a username yet
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("username")
+    .eq("clerk_id", userId)
+    .single();
+
+  return NextResponse.json({
+    success: true,
+    hasUsername: !!profile?.username,
+  });
 }

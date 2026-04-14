@@ -13,9 +13,11 @@ import { getSundaysOfYear, formatDateShort, getCurrentWeekNumber } from "@/lib/u
 export function WeekGrid({
   entries,
   year,
+  readOnly = false,
 }: {
   entries: WeekEntry[];
   year: number;
+  readOnly?: boolean;
 }) {
   const entryMap = new Map(entries.map((e) => [e.weekNumber, e]));
   const sundays = getSundaysOfYear(year);
@@ -58,35 +60,29 @@ export function WeekGrid({
                     : undefined;
                   const cellIndex = seasonIdx * WEEKS_PER_SEASON + i;
 
-                  return (
-                    <Link
-                      key={week}
-                      href={
-                        hasEntry ? `/add?edit=${week}` : `/add?week=${week}`
-                      }
-                      title={
-                        hasEntry
-                          ? `Week ${week} (${shortDate}): ${entry.songTitle} - ${entry.artist}`
-                          : `Week ${week} — ${shortDate ?? ""} — add a song`
-                      }
-                      className={`group relative flex aspect-square items-center justify-center rounded-lg text-xs font-mono animate-cell-enter week-cell-ripple overflow-hidden ${
-                        hasEntry
-                          ? "week-cell-filled hover:-translate-y-0.5 hover:scale-110"
-                          : "border border-border/50 hover:border-border hover-shimmer"
-                      } ${week === currentWeek ? "current-week-glow" : ""}`}
-                      style={
-                        {
-                          "--cell-delay": `${cellIndex * 0.02}s`,
-                          "--ripple-delay": `${(week - 1) * 0.06}s`,
-                          ...(hasEntry
-                            ? {
-                                background: `linear-gradient(135deg, ${colors.from}, ${colors.to})`,
-                                "--cell-glow": `0 4px 16px ${colors.from}50, 0 0 8px ${colors.to}30`,
-                              }
-                            : {}),
-                        } as React.CSSProperties
-                      }
-                    >
+                  const cellClassName = `group relative flex aspect-square items-center justify-center rounded-lg text-xs font-mono animate-cell-enter week-cell-ripple overflow-hidden ${
+                    hasEntry
+                      ? `week-cell-filled ${readOnly ? "" : "hover:-translate-y-0.5 hover:scale-110"}`
+                      : "border border-border/50 hover:border-border hover-shimmer"
+                  } ${week === currentWeek ? "current-week-glow" : ""}`;
+
+                  const cellStyle = {
+                    "--cell-delay": `${cellIndex * 0.02}s`,
+                    "--ripple-delay": `${(week - 1) * 0.06}s`,
+                    ...(hasEntry
+                      ? {
+                          background: `linear-gradient(135deg, ${colors.from}, ${colors.to})`,
+                          "--cell-glow": `0 4px 16px ${colors.from}50, 0 0 8px ${colors.to}30`,
+                        }
+                      : {}),
+                  } as React.CSSProperties;
+
+                  const cellTitle = hasEntry
+                    ? `Week ${week} (${shortDate}): ${entry.songTitle} - ${entry.artist}`
+                    : `Week ${week} — ${shortDate ?? ""}`;
+
+                  const cellContent = (
+                    <>
                       {hasEntry && entry.albumArt && (
                         <img
                           src={entry.albumArt}
@@ -119,6 +115,37 @@ export function WeekGrid({
                           }}
                         />
                       )}
+                    </>
+                  );
+
+                  if (readOnly) {
+                    return (
+                      <div
+                        key={week}
+                        title={cellTitle}
+                        className={cellClassName}
+                        style={cellStyle}
+                      >
+                        {cellContent}
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <Link
+                      key={week}
+                      href={
+                        hasEntry ? `/add?edit=${week}` : `/add?week=${week}`
+                      }
+                      title={
+                        hasEntry
+                          ? cellTitle
+                          : `${cellTitle} — add a song`
+                      }
+                      className={cellClassName}
+                      style={cellStyle}
+                    >
+                      {cellContent}
                     </Link>
                   );
                 })}

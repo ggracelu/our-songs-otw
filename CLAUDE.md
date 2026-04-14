@@ -31,6 +31,7 @@ npm run lint    # ESLint
 | `/immerse` | Immersive scroll view | Yes |
 | `/feed` | Friends feed — what your friends picked | Yes |
 | `/u/[username]` | Public profile page | No (if public) |
+| `/settings` | Profile settings: username, bio, public toggle | Yes |
 | `/onboarding` | Username selection on first sign-in | Yes |
 | `/sign-in` | Clerk sign-in | No |
 | `/sign-up` | Clerk sign-up | No |
