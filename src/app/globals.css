@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0d0d0d;
+  --foreground: #ededed;
+  --muted: #737373;
+  --accent: #8b5cf6;
+  --accent-light: #c4b5fd;
+  --card: #1a1a1a;
+  --card-hover: #262626;
+  --border: #2a2a2a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-border: var(--border);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --grid-template-columns-13: repeat(13, minmax(0, 1fr));
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out both;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Stagger fade-in for lists */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+
+/* Staggered cell entrance */
+@keyframes cellFadeIn {
+  from { opacity: 0; transform: translateY(6px) scale(0.92); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-cell-enter {
+  animation: cellFadeIn 0.35s ease-out both;
+  animation-delay: var(--cell-delay, 0s);
+}
+
+/* Shimmer on empty cells */
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to { background-position: 200% center; }
+}
+
+.hover-shimmer:hover {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out;
+}
+
+/* Filled cell colored glow */
+.week-cell-filled {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.week-cell-filled:hover {
+  box-shadow: var(--cell-glow);
+  filter: brightness(1.15);
+}
+
+/* Immersive view */
+.immerse-snap {
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
+  height: 100dvh;
+}
+
+.immerse-section {
+  scroll-snap-align: start;
+  min-height: 100dvh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+@keyframes immerse-slide-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes immerse-scale-in {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes immerse-glow-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+@keyframes bounce-down {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+.immerse-visible .immerse-art {
+  animation: immerse-scale-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.immerse-visible .immerse-title {
+  animation: immerse-slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+.immerse-visible .immerse-artist {
+  animation: immerse-slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+
+.immerse-visible .immerse-comment {
+  animation: immerse-slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+}
+
+.immerse-visible .immerse-mentions {
+  animation: immerse-slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both;
+}
+
+.immerse-visible .immerse-meta {
+  animation: immerse-slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
+}
+
+.immerse-art-glow {
+  animation: immerse-glow-pulse 4s ease-in-out infinite;
+}
+
+.immerse-scroll-hint {
+  animation: bounce-down 2s ease-in-out infinite;
+}
+
+/* Slow rotating color wash for immersive backgrounds */
+@keyframes immerse-wash-rotate {
+  from { transform: rotate(0deg) scale(1.5); }
+  to { transform: rotate(360deg) scale(1.5); }
+}
+
+.immerse-color-wash {
+  animation: immerse-wash-rotate 30s linear infinite;
+  opacity: 0.6;
+}
+
+/* Sound wave bars */
+@keyframes sound-pulse {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+
+.sound-bar {
+  animation: sound-pulse 1.2s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+/* Week ripple — fast shimmering wave, never fades to black */
+@keyframes week-ripple {
+  0%   { filter: brightness(0.92); transform: scale(1); }
+  35%  { filter: brightness(1.45); transform: scale(1.08); }
+  50%  { filter: brightness(1.15); transform: scale(1.03); }
+  65%  { filter: brightness(1.35); transform: scale(1.06); }
+  100% { filter: brightness(0.92); transform: scale(1); }
+}
+
+.week-cell-ripple {
+  animation: week-ripple 2.8s ease-in-out infinite;
+  animation-delay: var(--ripple-delay, 0s);
+}
+
+/* Current week glowing border */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 6px 2px #8b5cf680, 0 0 12px 4px #8b5cf640; }
+  50% { box-shadow: 0 0 10px 4px #8b5cf6a0, 0 0 20px 8px #8b5cf660; }
+}
+
+.current-week-glow {
+  border: 2px solid #8b5cf6 !important;
+  animation: glow-pulse 2.5s ease-in-out infinite;
+  z-index: 1;
+}
